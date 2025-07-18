@@ -3,7 +3,7 @@
 
 int main()
 {
-    Grafo *grafo1 = grafo_arq("teste3.pgm");
+    Grafo *grafo1 = grafo_arq("teste1.pgm");
     printf("Não crashei");
     return 0;
 }

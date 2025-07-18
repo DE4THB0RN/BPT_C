@@ -38,3 +38,20 @@ void union_k(int *parent, int *rank, int x, int y)
         rank[y]++;
     parent[x] = y;
 }
+
+int compara_peso(const void *a, const void *b)
+{
+    NoLista *no1 = (NoLista *)a;
+    NoLista *no2 = (NoLista *)b;
+
+    if (no1->peso < no2->peso)
+        return -1;
+    else if (no1->peso > no2->peso)
+        return 1;
+    else
+        return 0;
+}
+
+BPT *kruskal(Grafo *gr)
+{
+}

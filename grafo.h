@@ -59,3 +59,9 @@ void remover_aresta(int origem, int destino, Grafo *gr)
     remover_no(origem, gr->grafo[destino].arestas);
     remover_no(destino, gr->grafo[origem].arestas);
 }
+
+Lista *todas_as_arestas(Grafo *gr)
+{
+    bool *visitados = (bool *)malloc(gr->numVertices * sizeof(bool));
+    Lista *resp = nova_lista();
+}
