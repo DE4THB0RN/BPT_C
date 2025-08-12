@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#ifndef LISTA_H
+#define LISTA_H
 
 typedef struct NoLista
 {
@@ -7,6 +9,7 @@ typedef struct NoLista
     int peso;
     bool mst;
     bool removida;
+    bool inserida;
     struct NoLista *prox;
 } NoLista;
 
@@ -17,12 +20,7 @@ typedef struct Lista
     int tam;
 } Lista;
 
-void inserir_no(int vertice, int peso, Lista *lista);
-void inserir_no2(int vertice, Lista *lista);
-void remover_no(int vertice, Lista *lista);
-Lista *nova_lista();
-
-void inserir_no(int vertice, int peso, Lista *lista)
+void inserir_no_lista(int vertice, int peso, Lista *lista)
 {
     NoLista *tmp = lista->begin;
     while (tmp != NULL)
@@ -37,6 +35,7 @@ void inserir_no(int vertice, int peso, Lista *lista)
     tmp->vertice = vertice;
     tmp->prox = NULL;
     tmp->mst = false;
+    tmp->inserida = false;
     tmp->removida = false;
 
     if (lista->begin == NULL)
@@ -52,7 +51,7 @@ void inserir_no(int vertice, int peso, Lista *lista)
     lista->tam++;
 }
 
-void inserir_no2(int vertice, Lista *lista)
+void inserir_no2_lista(int vertice, Lista *lista)
 {
     NoLista *tmp = lista->begin;
     while (tmp != NULL)
@@ -66,6 +65,7 @@ void inserir_no2(int vertice, Lista *lista)
     tmp->vertice = vertice;
     tmp->prox = NULL;
     tmp->mst = false;
+    tmp->inserida = false;
     tmp->removida = false;
 
     if (lista->begin == NULL)
@@ -81,7 +81,7 @@ void inserir_no2(int vertice, Lista *lista)
     lista->tam++;
 }
 
-void remover_no(int vertice, Lista *lista)
+void remover_no_lista(int vertice, Lista *lista)
 {
 
     NoLista *tmp = lista->begin;
@@ -114,3 +114,5 @@ Lista *nova_lista()
     novo->tam = 0;
     return novo;
 }
+
+#endif // LISTA_H

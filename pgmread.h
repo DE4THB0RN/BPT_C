@@ -46,22 +46,22 @@ Grafo *grafo_arq(char *filename)
 
         if (lin > 0)
         {
-            adicionar_aresta(col * height + lin, col * height + lin - 1, abs(novo->grafo[col * width + lin].peso - novo->grafo[col * width + lin - 1].peso), novo);
+            adicionar_aresta(col * width + lin, col * width + lin - 1, abs(novo->grafo[col * width + lin].peso - novo->grafo[col * width + lin - 1].peso), novo);
         }
 
         if (col > 0)
         {
-            adicionar_aresta(col * height + lin, (col - 1) * height + lin, abs(novo->grafo[col * width + lin].peso - novo->grafo[(col - 1) * width + lin].peso), novo);
+            adicionar_aresta(col * width + lin, (col - 1) * width + lin, abs(novo->grafo[col * width + lin].peso - novo->grafo[(col - 1) * width + lin].peso), novo);
         }
 
         if (col > 0 && lin > 0)
         {
-            adicionar_aresta(col * height + lin, (col - 1) * height + lin - 1, abs(novo->grafo[col * width + lin].peso - novo->grafo[(col - 1) * width + lin - 1].peso), novo);
+            adicionar_aresta(col * width + lin, (col - 1) * width + lin - 1, abs(novo->grafo[col * width + lin].peso - novo->grafo[(col - 1) * width + lin - 1].peso), novo);
         }
 
         if (col > 0 && lin < width - 1)
         {
-            adicionar_aresta(col * height + lin, (col - 1) * height + lin + 1, abs(novo->grafo[col * width + lin].peso - novo->grafo[(col - 1) * width + lin + 1].peso), novo);
+            adicionar_aresta(col * width + lin, (col - 1) * width + lin + 1, abs(novo->grafo[col * width + lin].peso - novo->grafo[(col - 1) * width + lin + 1].peso), novo);
         }
 
         lin++;

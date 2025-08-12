@@ -2,6 +2,22 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#ifndef UTILIDADES_H
+#define UTILIDADES_H
+
+typedef struct MST_Edge
+{
+    int de;
+    int para;
+    int peso;
+} MST_Edge;
+
+typedef struct MST_Edge_List
+{
+    MST_Edge *arestas;
+    int numArestas;
+} MST_Edge_List;
+
 typedef struct Item
 {
     int chave;
@@ -74,3 +90,5 @@ int quant_item(int chave, Dicionario *di)
 
     return resp;
 }
+
+#endif // UTILIDADES_H

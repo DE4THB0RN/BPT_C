@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include "lista.h"
+#ifndef BPT_H
+#define BPT_H
 
 typedef struct NoBPT
 {
@@ -11,7 +13,9 @@ typedef struct NoBPT
 
     int vertice;
 
-    NoLista *aresta;
+    int de;
+    int para;
+    int peso;
 
 } NoBPT;
 
@@ -22,24 +26,24 @@ typedef struct BPT
 
 } BPT;
 
-NoBPT *criar_no_bpt_v(int vertice);
-NoBPT *criar_no_bpt_e(NoLista *aresta);
-BPT *criar_bpt(int numV);
-
 NoBPT *criar_no_bpt_v(int vertice)
 {
     NoBPT *novo = (NoBPT *)malloc(sizeof(NoBPT));
     novo->vertice = vertice;
-    novo->aresta = NULL;
+    novo->de = -1;
+    novo->para = -1;
+    novo->peso = -1;
 
     return novo;
 }
 
-NoBPT *criar_no_bpt_e(NoLista *aresta)
+NoBPT *criar_no_bpt_e(int de, int para, int peso)
 {
     NoBPT *novo = (NoBPT *)malloc(sizeof(NoBPT));
+    novo->de = de;
+    novo->para = para;
+    novo->peso = peso;
     novo->vertice = -1;
-    novo->aresta = aresta;
 
     return novo;
 }
@@ -52,3 +56,5 @@ BPT *criar_bpt(int numV)
 
     return novo;
 }
+
+#endif // BPT_H
