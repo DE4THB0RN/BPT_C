@@ -58,7 +58,7 @@ void novo_item(int chave, Dicionario *di)
     di->final = novo;
 }
 
-void adiciona_item(int chave, Dicionario *di)
+void add_no_item(int chave, Dicionario *di)
 {
     Item *temp = di->inicio;
     bool parada = false;
@@ -71,6 +71,23 @@ void adiciona_item(int chave, Dicionario *di)
         }
         temp = temp->prox;
     }
+}
+
+int valor_do_item(int chave, Dicionario *di)
+{
+    Item *temp = di->inicio;
+    int resp = -1;
+    bool parada = false;
+    while (temp != NULL && !parada)
+    {
+        if (temp->chave == chave)
+        {
+            resp = temp->valor;
+            parada = true;
+        }
+        temp = temp->prox;
+    }
+    return resp;
 }
 
 int quant_item(int chave, Dicionario *di)
@@ -89,6 +106,25 @@ int quant_item(int chave, Dicionario *di)
     }
 
     return resp;
+}
+
+void remover_item(int chave, Dicionario *di)
+{
+    Item *temp = di->inicio;
+    bool parada = false;
+    while (temp != NULL && !parada)
+    {
+        if (temp->prox->chave == chave)
+        {
+            Item *a_remover = temp->prox;
+            temp->prox = a_remover->prox;
+            free(a_remover);
+            a_remover = NULL;
+            di->quantItens--;
+            parada = true;
+        }
+        temp = temp->prox;
+    }
 }
 
 #endif // UTILIDADES_H

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include "pgmread.h"
 #include "bpt.h"
 #include "kruskal.h"
@@ -6,9 +7,18 @@
 #include "lista.h"
 #include "utilidades.h"
 
+
+
+#include "imagem.h"
+
 int main()
 {
-    Grafo *grafo1 = grafo_arq("teste2.pgm");
+    clock_t inicio, fim;
+    double tempo;
+
+    inicio = clock();
+    Grafo *grafo1 = grafo_arq("teste1.pgm");
+
     // Grafo *grafo1 = novo_grafo(8);
     // adicionar_aresta(0, 1, 95, grafo1);
     // adicionar_aresta(0, 4, 0, grafo1);
@@ -28,6 +38,28 @@ int main()
     // adicionar_aresta(6, 3, 96, grafo1);
     printf("Grafo criado com sucesso!\n");
     BPT *bpt = kruskal(grafo1);
-    printf("Não crashei");
+    fim = clock();
+
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo total de criação: %.2f s\n", tempo);
+
+    // Coisas para o processamento de teste1.pgm
+    int seed1 = processar_seed(grafo1, 113, 226);
+    int seed2 = processar_seed(grafo1, 1381, 294);
+    int seed3 = processar_seed(grafo1, 359, 183);
+    int seed4 = processar_seed(grafo1, 296, 512);
+    int seed5 = processar_seed(grafo1, 1890, 296);
+    int seed6 = processar_seed(grafo1, 1472, 959);
+    int seed7 = processar_seed(grafo1, 897, 309);
+
+    int seeds[] = {seed1, seed2, seed3, seed4, seed5, seed6, seed7};
+    int numseeds = 7;
+
+    printf("Processando seeds...\n");
+    adicionar_seeds(seeds, numseeds, bpt, grafo1);
+    printf("Teoricamente sem problemas\n");
+
+    salvar_imagem("resultado1.png", grafo1);
+
     return 0;
 }

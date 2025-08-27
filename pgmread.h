@@ -39,6 +39,9 @@ Grafo *grafo_arq(char *filename)
 
     Grafo *novo = novo_grafo(height * width);
 
+    novo->width = width;
+    novo->height = height;
+
     while (fgets(linha, 100, arq))
     {
 
