@@ -7,8 +7,6 @@
 #include "lista.h"
 #include "utilidades.h"
 
-
-
 #include "imagem.h"
 
 int main()
@@ -52,14 +50,23 @@ int main()
     int seed6 = processar_seed(grafo1, 1472, 959);
     int seed7 = processar_seed(grafo1, 897, 309);
 
-    int seeds[] = {seed1, seed2, seed3, seed4, seed5, seed6, seed7};
+    int seeds[] = 
+    {
+        seed1,
+        seed6,
+        seed3, 
+        seed4, 
+        seed5, 
+        seed2, 
+        seed7
+        };
     int numseeds = 7;
 
     printf("Processando seeds...\n");
     adicionar_seeds(seeds, numseeds, bpt, grafo1);
     printf("Teoricamente sem problemas\n");
 
-    salvar_imagem("resultado1.png", grafo1);
+    salvar_imagem("resultado1_1s.png", grafo1);
 
     return 0;
 }

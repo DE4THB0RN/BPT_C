@@ -61,6 +61,7 @@ BPT *criar_bpt(int numV)
 void adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
 {
     NoBPT *tmp;
+    bool cortou = false;
     for (int i = 0; i < numseeds; i++)
     {
         tmp = bpt->folhas[seeds[i]];
@@ -69,59 +70,65 @@ void adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
             tmp = tmp->pai;
             tmp->marca++;
 
-            if(tmp->marca == 2){
+            if (tmp->marca == 2)
+            {
                 NoLista *aresta = buscar_aresta(tmp->de, tmp->para, gr);
-                if(aresta){
-                    aresta->removida = true;
-                }
+                aresta->removida = true;
+               // cortou = true;
             }
         }
 
-        colorir_grafo(gr,seeds[i]);
+        colorir_grafo(gr, seeds[i]);
+        // cortou = false;
     }
 
-    //Aqui eu mandaria colorir
+    // Aqui eu mandaria colorir
 }
 
-void remover_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr){
+void remover_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
+{
     NoBPT *tmp;
 
-    for(int i = 0; i < numseeds; i++){
+    for (int i = 0; i < numseeds; i++)
+    {
         tmp = bpt->folhas[seeds[i]];
-        while(tmp != bpt->raiz && tmp->marca != 1){
+        while (tmp != bpt->raiz && tmp->marca != 1)
+        {
             tmp = tmp->pai;
             tmp->marca--;
 
-            if(tmp->marca == 1){
+            if (tmp->marca == 1)
+            {
                 NoLista *aresta = buscar_aresta(tmp->de, tmp->para, gr);
-                if(aresta){
+                if (aresta)
+                {
                     aresta->removida = false;
                 }
-                //Talvez recolorir direto aqui, progressivamente
+                // Talvez recolorir direto aqui, progressivamente
             }
         }
     }
-    //Mas também estou considerando recolorir aqui
+    // Mas também estou considerando recolorir aqui
 }
 
+void mostrar_bpt(BPT *bpt)
+{
 
-void mostrar_bpt(BPT *bpt){
-
-    if (bpt == NULL || bpt->raiz == NULL) {
+    if (bpt == NULL || bpt->raiz == NULL)
+    {
         printf("Não tem nada aqui\n");
         return;
     }
 
     printf("BPT:\n");
-
-    
-
 }
 
-int processar_seed(Grafo* gr, int x, int y){
+int processar_seed(Grafo *gr, int x, int y)
+{
 
     int vertice = y * gr->width + x;
-    if(vertice < 0 || vertice >= gr->numVertices){
+    if (vertice < 0 || vertice >= gr->numVertices)
+    {
         printf("Esse número aí não tá valendo\n");
         return -1;
     }

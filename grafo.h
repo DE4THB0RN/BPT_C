@@ -155,6 +155,7 @@ void colorir_grafo(Grafo *gr, int seed)
     novo_item(gr->numCores, gr->tamCores);
     colorir_recursivo(gr, seed, gr->numCores, visitados);
     gr->numCores++;
+    printf("Número de seções: %d\n", gr->numCores);
 }
 
 void recolorir_grafo(Grafo *gr, MST_Edge *corte)

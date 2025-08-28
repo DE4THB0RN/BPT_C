@@ -19,9 +19,9 @@ void salvar_imagem(char *nome, Grafo *gr)
             int index = (i * width + j) * 3;
             int cor = gr->grafo[i * width + j].cor;
 
-            unsigned char r = (cor * cor * 5) % 256;
-            unsigned char g = (cor * cor * 30) % 256;
-            unsigned char b = (cor * cor * 40) % 256;
+            unsigned char r = (cor * cor * 20) % 256;
+            unsigned char g = (cor * cor * 50) % 256;
+            unsigned char b = (cor * cor * 100) % 256;
 
             img[index] = r;
             img[index + 1] = g;
