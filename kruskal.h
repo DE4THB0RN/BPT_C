@@ -86,17 +86,8 @@ BPT *kruskal(Grafo *gr)
     {
         proxima = lista_arestas->arestas[index++];
 
-        // if (proxima.de == 1431677248 || proxima.para == 1431677248)
-        // {
-        //     printf("Erro: Aresta inválida encontrada.\n");
-        //     printf("de: %d, para: %d, peso: %d\n", proxima.de, proxima.para, proxima.peso);
-        // }
-
         x = find(parent, proxima.de);
         y = find(parent, proxima.para);
-
-        // if (index == lista_arestas->numArestas)
-        //     printf("O limite era aqui\n");
 
         if (x != y)
         {

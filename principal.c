@@ -66,7 +66,7 @@ int main()
     adicionar_seeds(seeds, numseeds, bpt, grafo1);
     printf("Teoricamente sem problemas\n");
 
-    salvar_imagem("resultado1_1s.png", grafo1);
+    salvar_imagem("resultado1_7s.png", grafo1);
 
     return 0;
 }

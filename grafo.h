@@ -131,11 +131,12 @@ void marcar_mst(int origem, int destino, Grafo *gr)
     }
 }
 
-void colorir_recursivo(Grafo *gr, int vertice, int cor, bool *visitados)
+void colorir_recursivo(Grafo *gr, int vertice, int cor, bool *visitados, int *vertice_count)
 {
     visitados[vertice] = true;
     gr->grafo[vertice].cor = cor;
     add_no_item(cor, gr->tamCores);
+    vertice_count[0] = vertice_count[0] + 1;
 
     NoLista *tmp = gr->grafo[vertice].arestas->begin;
 
@@ -143,7 +144,7 @@ void colorir_recursivo(Grafo *gr, int vertice, int cor, bool *visitados)
     {
         if (!visitados[tmp->vertice] && !tmp->removida && tmp->mst)
         {
-            colorir_recursivo(gr, tmp->vertice, cor, visitados);
+            colorir_recursivo(gr, tmp->vertice, cor, visitados, vertice_count);
         }
         tmp = tmp->prox;
     }
@@ -151,15 +152,18 @@ void colorir_recursivo(Grafo *gr, int vertice, int cor, bool *visitados)
 
 void colorir_grafo(Grafo *gr, int seed)
 {
+    int vertice_count = 0;
     bool *visitados = (bool *)malloc(gr->numVertices * sizeof(bool));
     novo_item(gr->numCores, gr->tamCores);
-    colorir_recursivo(gr, seed, gr->numCores, visitados);
+    colorir_recursivo(gr, seed, gr->numCores, visitados, &vertice_count);
+    printf("Seção %d com número de vértices: %d\n", gr->numCores, vertice_count);
     gr->numCores++;
     printf("Número de seções: %d\n", gr->numCores);
 }
 
 void recolorir_grafo(Grafo *gr, MST_Edge *corte)
 {
+    int vertice_count = 0;
     bool *visitados = (bool *)malloc(gr->numVertices * sizeof(bool));
     int cor1 = gr->grafo[corte->de].cor;
     int cor2 = gr->grafo[corte->para].cor;
@@ -167,12 +171,12 @@ void recolorir_grafo(Grafo *gr, MST_Edge *corte)
     if (valor_do_item(cor1, gr->tamCores) > valor_do_item(cor2, gr->tamCores))
     {
         remover_item(cor2, gr->tamCores);
-        colorir_recursivo(gr, corte->para, cor1, visitados);
+        colorir_recursivo(gr, corte->para, cor1, visitados, &vertice_count);
     }
     else
     {
         remover_item(cor1, gr->tamCores);
-        colorir_recursivo(gr, corte->de, cor2, visitados);
+        colorir_recursivo(gr, corte->de, cor2, visitados, &vertice_count);
     }
 }
 

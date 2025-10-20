@@ -73,8 +73,11 @@ void adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
             if (tmp->marca == 2)
             {
                 NoLista *aresta = buscar_aresta(tmp->de, tmp->para, gr);
+                NoLista *aresta2 = buscar_aresta(tmp->para, tmp->de, gr);
+
                 aresta->removida = true;
-               // cortou = true;
+                aresta2->removida = true;
+                // cortou = true;
             }
         }
 
