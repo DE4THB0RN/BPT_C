@@ -4,8 +4,7 @@
 #include "bpt.h"
 #include "tarjan.h"
 #include "grafo.h"
-#include "lista.h"
-#include "utilidades.h"
+
 
 #include "imagem.h"
 

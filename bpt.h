@@ -1,141 +1,67 @@
 #include <stdlib.h>
-#include "lista.h"
+#include "grafo.h"
 #ifndef BPT_H
 #define BPT_H
 
-typedef struct NoBPT
+class NoBPT
 {
+protected:
     int marca;
 
-    struct NoBPT *dir;
-    struct NoBPT *esq;
-    struct NoBPT *pai;
+private:
+    NoBPT *dir;
+    NoBPT *esq;
+    NoBPT *pai;
 
-    int vertice;
+public:
+    void set_dir(NoBPT *d);
+    void set_esq(NoBPT *e);
+    void set_pai(NoBPT *p);
 
+    NoBPT *get_dir();
+    NoBPT *get_esq();
+    NoBPT *get_pai();
+    void aumenta_marca();
+    void diminui_marca();
+    int get_marca();
+
+    virtual ~NoBPT();
+};
+
+class No_Aresta : public NoBPT
+{
+
+public:
     int de;
     int para;
     int peso;
+    No_Aresta(int d, int p, int w);
+};
 
-} NoBPT;
-
-typedef struct BPT
+class No_Vertice : public NoBPT
 {
-    NoBPT *raiz;
-    NoBPT **folhas;
+private:
+    int vertice;
 
-} BPT;
+public:
+    No_Vertice(int v);
+};
 
-NoBPT *criar_no_bpt_v(int vertice)
+class BPT
 {
-    NoBPT *novo = (NoBPT *)malloc(sizeof(NoBPT));
-    novo->vertice = vertice;
-    novo->de = -1;
-    novo->para = -1;
-    novo->peso = -1;
+private:
+    No_Aresta *raiz;
+    No_Vertice **folhas;
 
-    return novo;
-}
+    void delete_tree(NoBPT *atual);
 
-NoBPT *criar_no_bpt_e(int de, int para, int peso)
-{
-    NoBPT *novo = (NoBPT *)malloc(sizeof(NoBPT));
-    novo->de = de;
-    novo->para = para;
-    novo->peso = peso;
-    novo->vertice = -1;
-    novo->marca = 0;
+public:
+    BPT(int numV);
+    ~BPT();
 
-    return novo;
-}
-
-BPT *criar_bpt(int numV)
-{
-    BPT *novo = (BPT *)malloc(sizeof(BPT));
-    novo->folhas = (NoBPT **)malloc(numV * sizeof(NoBPT));
-    novo->raiz = NULL;
-
-    return novo;
-}
-
-void adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
-{
-    NoBPT *tmp;
-    bool cortou = false;
-    for (int i = 0; i < numseeds; i++)
-    {
-        tmp = bpt->folhas[seeds[i]];
-        while (tmp != bpt->raiz)
-        {
-            tmp = tmp->pai;
-            tmp->marca++;
-
-            if (tmp->marca == 2)
-            {
-                NoLista *aresta = buscar_aresta(tmp->de, tmp->para, gr);
-                NoLista *aresta2 = buscar_aresta(tmp->para, tmp->de, gr);
-
-                aresta->removida = true;
-                aresta2->removida = true;
-                // cortou = true;
-            }
-        }
-
-        colorir_grafo(gr, seeds[i]);
-        // cortou = false;
-    }
-
-    // Aqui eu mandaria colorir
-}
-
-void remover_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
-{
-    NoBPT *tmp;
-
-    for (int i = 0; i < numseeds; i++)
-    {
-        tmp = bpt->folhas[seeds[i]];
-        while (tmp != bpt->raiz && tmp->marca != 1)
-        {
-            tmp = tmp->pai;
-            tmp->marca--;
-
-            if (tmp->marca == 1)
-            {
-                NoLista *aresta = buscar_aresta(tmp->de, tmp->para, gr);
-                if (aresta)
-                {
-                    aresta->removida = false;
-                }
-                // Talvez recolorir direto aqui, progressivamente
-            }
-        }
-    }
-    // Mas também estou considerando recolorir aqui
-}
-
-void mostrar_bpt(BPT *bpt)
-{
-
-    if (bpt == NULL || bpt->raiz == NULL)
-    {
-        printf("Não tem nada aqui\n");
-        return;
-    }
-
-    printf("BPT:\n");
-}
-
-int processar_seed(Grafo *gr, int x, int y)
-{
-
-    int vertice = y * gr->width + x;
-    if (vertice < 0 || vertice >= gr->numVertices)
-    {
-        printf("Esse número aí não tá valendo\n");
-        return -1;
-    }
-    return vertice;
-}
+    void adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr);
+    void remover_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr);
+    void kruskal(Grafo *gr);
+};
 
 #endif // BPT_H
