@@ -9,7 +9,7 @@ Vertex::Vertex()
 
 Grafo::Grafo(int numV)
 {
-    numCores = numV;
+    numVertices = numV;
     numCores = 0;
     grafo = new Vertex[numV];
 }
@@ -45,6 +45,14 @@ void Grafo::adicionar_aresta2(int origem, int destino)
     novaAresta.removida = false;
     novaAresta.inserida = false;
     grafo[origem].arestas.push_back(novaAresta);
+
+    Aresta novaAresta2;
+    novaAresta2.vertice = origem;
+    novaAresta2.peso = novaAresta.peso;
+    novaAresta2.mst = false;
+    novaAresta2.removida = false;
+    novaAresta2.inserida = false;
+    grafo[destino].arestas.push_back(novaAresta2);
 }
 
 void Grafo::remover_aresta(int origem, int destino)
@@ -54,7 +62,14 @@ void Grafo::remover_aresta(int origem, int destino)
         if (aresta.vertice == destino)
         {
             aresta.removida = true;
-            return;
+        }
+    }
+
+    for (auto &aresta : grafo[destino].arestas)
+    {
+        if (aresta.vertice == origem)
+        {
+            aresta.removida = true;
         }
     }
 }
@@ -70,7 +85,7 @@ Aresta &Grafo::buscar_aresta(int origem, int destino)
         }
     }
 
-    std::cout << "Aresta nao encontrada!" << std::endl;
+    throw std::runtime_error("Aresta não encontrada");
 }
 
 void Grafo::marcar_mst(int origem, int destino)
@@ -80,7 +95,13 @@ void Grafo::marcar_mst(int origem, int destino)
         if (aresta.vertice == destino)
         {
             aresta.mst = true;
-            return;
+        }
+    }
+    for (auto &aresta : grafo[destino].arestas)
+    {
+        if (aresta.vertice == origem)
+        {
+            aresta.mst = true;
         }
     }
 }
@@ -94,7 +115,7 @@ void Grafo::colorir_recursivo(int vertice, int cor, bool *visitados, int *vertic
 
     for (auto &aresta : grafo[vertice].arestas)
     {
-        if (!visitados[aresta.vertice] && !aresta.removida)
+        if (!visitados[aresta.vertice] && !aresta.removida && aresta.mst)
         {
             colorir_recursivo(aresta.vertice, cor, visitados, vertice_count);
         }
@@ -148,6 +169,24 @@ std::vector<MST_Edge> *Grafo::arestas_MST()
                 mst_nova_aresta.peso = aresta.peso;
                 lista->push_back(mst_nova_aresta);
             }
+        }
+    }
+    return lista;
+}
+
+std::vector<MST_Edge> *Grafo::lista_arestas()
+{
+    std::vector<MST_Edge> *lista = new std::vector<MST_Edge>();
+    for (int i = 0; i < numVertices; i++)
+    {
+        for (auto &aresta : grafo[i].arestas)
+        {
+
+            MST_Edge mst_nova_aresta;
+            mst_nova_aresta.de = i;
+            mst_nova_aresta.para = aresta.vertice;
+            mst_nova_aresta.peso = aresta.peso;
+            lista->push_back(mst_nova_aresta);
         }
     }
     return lista;

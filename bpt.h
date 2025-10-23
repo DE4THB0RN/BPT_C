@@ -51,7 +51,7 @@ class BPT
 {
 private:
     No_Aresta *raiz;
-    No_Vertice **folhas;
+    std::vector<No_Vertice *> folhas;
 
     void delete_tree(NoBPT *atual);
 
@@ -59,8 +59,8 @@ public:
     BPT(int numV);
     ~BPT();
 
-    void adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr);
-    void remover_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr);
+    void adicionar_seeds(int *seeds, int numseeds, Grafo *gr);
+    void remover_seeds(int *seeds, int numseeds, Grafo *gr);
     void kruskal(Grafo *gr);
 };
 

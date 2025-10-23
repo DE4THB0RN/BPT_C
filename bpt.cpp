@@ -85,18 +85,13 @@ No_Vertice::No_Vertice(int v)
 BPT::BPT(int numV)
 {
     raiz = nullptr;
-    folhas = new No_Vertice *[numV];
-    for (int i = 0; i < numV; i++)
-    {
-        folhas[i] = nullptr;
-    }
+    folhas.resize(numV);
 }
 
 BPT::~BPT()
 {
     delete_tree(raiz);
     raiz = nullptr;
-    delete[] folhas;
 }
 
 void BPT::delete_tree(NoBPT *atual)
@@ -112,24 +107,23 @@ void BPT::delete_tree(NoBPT *atual)
     delete atual;
 }
 
-void BPT::adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
+void BPT::adicionar_seeds(int *seeds, int numseeds, Grafo *gr)
 {
     NoBPT *tmp;
 
     for (int i = 0; i < numseeds; i++)
     {
-        tmp = bpt->folhas[seeds[i]];
-        while (tmp != bpt->raiz)
+        tmp = folhas[seeds[i]];
+        while (tmp != raiz)
         {
             tmp = tmp->get_pai();
             tmp->aumenta_marca();
 
             if (tmp->get_marca() == 2)
             {
-                No_Aresta *aresta_no = static_cast<No_Aresta *>(tmp);
-                Aresta &aresta = gr->buscar_aresta(aresta_no->de, aresta_no->para);
+                No_Aresta *aresta_no = dynamic_cast<No_Aresta *>(tmp);
 
-                aresta.removida = true;
+                gr->remover_aresta(aresta_no->de, aresta_no->para);
 
                 aresta_no = nullptr;
             }
@@ -139,14 +133,14 @@ void BPT::adicionar_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
     }
 }
 
-void BPT::remover_seeds(int *seeds, int numseeds, BPT *bpt, Grafo *gr)
+void BPT::remover_seeds(int *seeds, int numseeds, Grafo *gr)
 {
     NoBPT *tmp;
 
     for (int i = 0; i < numseeds; i++)
     {
-        tmp = bpt->folhas[seeds[i]];
-        while (tmp != bpt->raiz && tmp->get_marca() != 1)
+        tmp = folhas[seeds[i]];
+        while (tmp != raiz && tmp->get_marca() != 1)
         {
             tmp = tmp->get_pai();
             tmp->diminui_marca();

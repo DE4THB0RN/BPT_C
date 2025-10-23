@@ -1,5 +1,6 @@
 #include "tarjan.h"
 #include <algorithm>
+#include <iostream>
 
 int Tarjan::find(int *parent, int q)
 {
@@ -30,11 +31,13 @@ void BPT::kruskal(Grafo *gr)
 {
     int num_vertices = gr->get_num_vertices();
 
-    std::vector<MST_Edge> *mst_arestas = gr->arestas_MST();
+    std::vector<MST_Edge> *arestas = gr->lista_arestas();
+    std::cout << "Até aqui vai" << std::endl;
 
-    std::sort(mst_arestas->begin(), mst_arestas->end(), [](const MST_Edge &a, const MST_Edge &b)
-              { return a.peso < b.peso; });
+    std::sort(arestas->begin(), arestas->end(), [](const MST_Edge &a, const MST_Edge &b)
+              { return a.peso > b.peso; });
 
+    std::cout << "Maior peso: " << arestas->at(0).peso << " Menor peso: " << arestas->at(arestas->size() - 1).peso << std::endl;
     int *parent = new int[num_vertices];
     int *rank = new int[num_vertices];
 
@@ -53,11 +56,9 @@ void BPT::kruskal(Grafo *gr)
 
     while (edge_count < num_vertices - 1)
     {
-        MST_Edge proxima = mst_arestas->at(index++);
-
-        x = find(parent, proxima.de);
-        y = find(parent, proxima.para);
-
+        MST_Edge proxima = arestas->at(index++);
+        x = Tarjan::find(parent, proxima.de);
+        y = Tarjan::find(parent, proxima.para);
         if (x != y)
         {
 
@@ -102,5 +103,4 @@ void BPT::kruskal(Grafo *gr)
     delete[] parent;
     delete[] rank;
     delete[] raizes;
-    delete[] mst_arestas;
 }

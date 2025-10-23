@@ -20,9 +20,9 @@ void Image_Manager::salvar_imagem(Grafo *gr)
             int index = (i * width + j);
             int cor = gr->grafo[i * width + j].cor;
 
-            uchar r = (cor * cor * 20) % 256;
-            uchar g = (cor * cor * 50) % 256;
-            uchar b = (cor * cor * 100) % 256;
+            uchar r = (cor * cor * cor * 30) % 256;
+            uchar g = (cor * cor * 10) % 256;
+            uchar b = (cor * cor * 70 + cor) % 256;
 
             nova_imagem.at<cv::Vec3b>(i, j) = cv::Vec3b(b, g, r);
         }
@@ -46,7 +46,9 @@ Grafo *Image_Manager::ler_imagem()
     width = imagem.cols;
     height = imagem.rows;
 
-    Grafo *gr = new Grafo(width * height);
+    int vertices = width * height;
+
+    Grafo *gr = new Grafo(vertices);
 
     for (int i = 0; i < height; i++)
     {
@@ -70,5 +72,18 @@ Grafo *Image_Manager::ler_imagem()
     }
 
     imagem.release();
+
+    std::cout << "Imagem lida com sucesso!" << std::endl;
     return gr;
+}
+
+int Image_Manager::processar_seed(int x, int y)
+{
+    if (y > height || x > width)
+    {
+        throw std::runtime_error("Valor inválido");
+    }
+    int resp = y * width + x;
+
+    return resp;
 }

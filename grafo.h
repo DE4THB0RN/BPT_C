@@ -41,6 +41,7 @@ public:
     void remover_aresta(int origem, int destino);
     Aresta &buscar_aresta(int origem, int destino);
     std::vector<MST_Edge> *arestas_MST();
+    std::vector<MST_Edge> *lista_arestas();
     void marcar_mst(int origem, int destino);
     void colorir_grafo(int seed);
     void recolorir_grafo(MST_Edge *corte);
