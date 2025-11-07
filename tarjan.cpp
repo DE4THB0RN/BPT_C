@@ -103,4 +103,5 @@ void BPT::kruskal(Grafo *gr)
     delete[] parent;
     delete[] rank;
     delete[] raizes;
+    delete arestas;
 }

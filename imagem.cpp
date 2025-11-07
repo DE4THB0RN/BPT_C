@@ -8,6 +8,16 @@ Image_Manager::Image_Manager(std::string nome)
     height = 0;
 }
 
+int Image_Manager::get_width()
+{
+    return width;
+}
+
+int Image_Manager::get_height()
+{
+    return height;
+}
+
 void Image_Manager::salvar_imagem(Grafo *gr)
 {
 
@@ -31,6 +41,30 @@ void Image_Manager::salvar_imagem(Grafo *gr)
     cv::imwrite("segmented_" + nome_arquivo, nova_imagem);
     cv::imshow("Imagem segmentada", nova_imagem);
     cv::waitKey(0);
+    nova_imagem.release();
+}
+
+void Image_Manager::salvar_imagem2(Grafo *gr, const std::string &caminho_saida)
+{
+
+    cv::Mat nova_imagem(height, width, CV_8UC3, cv::Scalar(0, 0, 0));
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            int index = (i * width + j);
+            int cor = gr->grafo[i * width + j].cor;
+
+            uchar r = (cor * cor * cor * 30) % 256;
+            uchar g = (cor * cor * 10) % 256;
+            uchar b = (cor * cor * 70 + cor) % 256;
+
+            nova_imagem.at<cv::Vec3b>(i, j) = cv::Vec3b(b, g, r);
+        }
+    }
+
+    cv::imwrite(caminho_saida, nova_imagem);
     nova_imagem.release();
 }
 

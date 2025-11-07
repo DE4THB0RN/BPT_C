@@ -158,3 +158,26 @@ void BPT::remover_seeds(int *seeds, int numseeds, Grafo *gr)
     }
     // Mas também estou considerando recolorir aqui
 }
+
+void BPT::remover_seed(int seed, Grafo *gr)
+{
+    NoBPT *tmp = folhas[seed];
+    MST_Edge corte;
+    while (tmp != raiz && tmp->get_marca() != 1)
+    {
+        tmp = tmp->get_pai();
+        tmp->diminui_marca();
+
+        if (tmp->get_marca() == 1)
+        {
+            No_Aresta *aresta_no = static_cast<No_Aresta *>(tmp);
+            Aresta &aresta = gr->buscar_aresta(aresta_no->de, aresta_no->para);
+
+            aresta.removida = false;
+
+            corte = MST_Edge{aresta_no->de, aresta_no->para, aresta_no->peso};
+
+            gr->recolorir_grafo(&corte);
+        }
+    }
+}

@@ -9,7 +9,7 @@ int main()
 {
     clock_t inicio, fim;
     double tempo;
-    Image_Manager image_manager = Image_Manager("teste.jpg");
+    Image_Manager image_manager = Image_Manager("teste_facil.jpeg");
 
     inicio = clock();
 
@@ -34,9 +34,9 @@ int main()
     // adicionar_aresta(6, 3, 96, grafo1);
     std::cout << "Grafo criado com sucesso!" << std::endl;
     BPT bpt = BPT(grafo1->get_num_vertices());
-    std::cout << "BPT criado com sucesso!" << std::endl;
 
     bpt.kruskal(grafo1);
+    std::cout << "BPT criado com sucesso!" << std::endl;
 
     fim = clock();
 
@@ -44,24 +44,31 @@ int main()
     std::cout << "Tempo de execucao: " << tempo << " segundos." << std::endl;
 
     // Coisas para o processamento de teste1.pgm
-    int seed1 = image_manager.processar_seed(113, 226);
-    int seed2 = image_manager.processar_seed(1381, 294);
-    int seed3 = image_manager.processar_seed(359, 183);
-    int seed4 = image_manager.processar_seed(296, 512);
-    int seed5 = image_manager.processar_seed(1890, 296);
-    int seed6 = image_manager.processar_seed(1472, 959);
-    int seed7 = image_manager.processar_seed(897, 309);
+    int seed_fundo = image_manager.processar_seed(774, 222);
+    int seed_f1 = image_manager.processar_seed(427, 209);
+    int seed_f2 = image_manager.processar_seed(1100, 192);
+    int seed1 = image_manager.processar_seed(545, 136);
+    int seed2 = image_manager.processar_seed(547, 236);
+    int seed3 = image_manager.processar_seed(449, 232);
+    int seed4 = image_manager.processar_seed(1159, 92);
+    int seed5 = image_manager.processar_seed(1024, 204);
+    int seed6 = image_manager.processar_seed(1050, 341);
+    int seed7 = image_manager.processar_seed(967, 161);
 
     int seeds[] =
         {
-            seed1,
-            seed6,
-            seed3,
-            seed4,
-            seed5,
+            seed_f1,
+            seed_f2,
             seed2,
-            seed7};
-    int numseeds = 7;
+            seed3,
+            seed6,
+            seed1,
+            seed5,
+            seed4,
+            seed7,
+            //  seed_fundo,
+        };
+    int numseeds = 8;
 
     std::cout << "Adicionando seeds..." << std::endl;
     bpt.adicionar_seeds(seeds, numseeds, grafo1);

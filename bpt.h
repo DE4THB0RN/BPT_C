@@ -61,6 +61,7 @@ public:
 
     void adicionar_seeds(int *seeds, int numseeds, Grafo *gr);
     void remover_seeds(int *seeds, int numseeds, Grafo *gr);
+    void remover_seed(int seed, Grafo *gr);
     void kruskal(Grafo *gr);
 };
 
