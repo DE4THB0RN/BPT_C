@@ -86,6 +86,9 @@ BPT::BPT(int numV)
 {
     raiz = nullptr;
     folhas.resize(numV);
+
+    parent = new int[numV * 2 - 1];
+    size = 0;
 }
 
 BPT::~BPT()
@@ -180,4 +183,10 @@ void BPT::remover_seed(int seed, Grafo *gr)
             gr->recolorir_grafo(&corte);
         }
     }
+}
+
+void BPT::make_set(int q)
+{
+    parent[q] = -1;
+    size++;
 }

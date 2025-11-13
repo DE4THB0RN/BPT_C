@@ -8,7 +8,7 @@ class Tarjan
 {
 public:
     static int find(int *parent, int q);
-    static void union_k(int *parent, int *rank, int x, int y);
+    static void union_k(int *parent, int &size, int x, int y);
 };
 
 #endif // KRSUKAL_H

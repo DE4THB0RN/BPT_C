@@ -59,9 +59,13 @@ public:
     BPT(int numV);
     ~BPT();
 
+    int *parent;
+    int size;
+
     void adicionar_seeds(int *seeds, int numseeds, Grafo *gr);
     void remover_seeds(int *seeds, int numseeds, Grafo *gr);
     void remover_seed(int seed, Grafo *gr);
+    void make_set(int q);
     void kruskal(Grafo *gr);
 };
 

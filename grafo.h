@@ -33,6 +33,7 @@ public:
     int numCores;
     std::map<int, int> tamCores;
     Vertex *grafo;
+    
 
     Grafo(int numV);
     int get_num_vertices();

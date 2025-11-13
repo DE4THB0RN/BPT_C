@@ -4,27 +4,24 @@
 
 int Tarjan::find(int *parent, int q)
 {
-    int r = q, tmp;
 
-    while (parent[r] >= 0)
-        r = parent[r];
     while (parent[q] >= 0)
-    {
-        tmp = q;
         q = parent[q];
-        parent[tmp] = r;
-    }
+    // while (parent[q] >= 0)
+    // {
+    //     tmp = q;
+    //     q = parent[q];
+    //     parent[tmp] = r;
+    // }
 
-    return r;
+    return q;
 }
 
-void Tarjan::union_k(int *parent, int *rank, int x, int y)
+void Tarjan::union_k(int *parent, int &size, int x, int y)
 {
-    if (rank[x] > rank[y])
-        std::swap(x, y);
-    if (rank[x] == rank[y])
-        rank[y]++;
-    parent[x] = y;
+    parent[y] = size;
+    parent[x] = size;
+    size++;
 }
 
 void BPT::kruskal(Grafo *gr)
@@ -35,25 +32,25 @@ void BPT::kruskal(Grafo *gr)
     std::cout << "Até aqui vai" << std::endl;
 
     std::sort(arestas->begin(), arestas->end(), [](const MST_Edge &a, const MST_Edge &b)
-              { return a.peso > b.peso; });
+              { return a.peso < b.peso; });
 
-    std::cout << "Maior peso: " << arestas->at(0).peso << " Menor peso: " << arestas->at(arestas->size() - 1).peso << std::endl;
-    int *parent = new int[num_vertices];
-    int *rank = new int[num_vertices];
+    // std::cout << "Maior peso: " << arestas->at(0).peso << " Menor peso: " << arestas->at(arestas->size() - 1).peso << std::endl;
+    int *parent = new int[num_vertices * 2 - 1];
+    int size = 0;
 
     NoBPT **raizes = new NoBPT *[num_vertices]();
 
     for (int i = 0; i < num_vertices; i++)
     {
         parent[i] = -1;
-        rank[i] = 0;
     }
+    size = num_vertices - 1;
 
     int edge_count = 0;
     int index = 0;
     int x, y;
     NoBPT *pai1, *pai2;
-
+    std::cout << "Começando Kruskal..." << std::endl;
     while (edge_count < num_vertices - 1)
     {
         MST_Edge proxima = arestas->at(index++);
@@ -89,7 +86,7 @@ void BPT::kruskal(Grafo *gr)
 
             gr->marcar_mst(proxima.de, proxima.para);
 
-            Tarjan::union_k(parent, rank, x, y);
+            Tarjan::union_k(parent, size, x, y);
 
             edge_count++;
 
@@ -100,8 +97,8 @@ void BPT::kruskal(Grafo *gr)
     int root = Tarjan::find(parent, 0);
     raiz = static_cast<No_Aresta *>(raizes[root]);
 
+    std::cout << "Kruskal finalizado!" << std::endl;
     delete[] parent;
-    delete[] rank;
     delete[] raizes;
     delete arestas;
 }
