@@ -6,9 +6,15 @@
 
 class Tarjan
 {
+private:
+    static int find_1(BPT *bpt, int q);
+    static int find_2(BPT *bpt, int q);
+
 public:
-    static int find(int *parent, int q);
-    static void union_k(int *parent, int &size, int x, int y);
+    static int find(BPT *bpt, int q);
+    static int union_k1(BPT *bpt, int x, int y);
+    static int union_k2(BPT *bpt, int x, int y);
+    static int union_k(BPT *bpt, int x, int y);
 };
 
 #endif // KRSUKAL_H

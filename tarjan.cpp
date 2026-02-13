@@ -2,103 +2,134 @@
 #include <algorithm>
 #include <iostream>
 
-int Tarjan::find(int *parent, int q)
+int Tarjan::find_1(BPT *bpt, int q)
 {
+    int r = q;
+    int tmp = 0;
+    while (bpt->parent_1[r] >= 0)
+    {
+        r = bpt->parent_1[r];
+    }
+    while (bpt->parent_1[q] >= 0)
+    {
+        tmp = q;
+        q = bpt->parent_1[q];
+        bpt->parent_1[tmp] = r;
+    }
 
-    while (parent[q] >= 0)
-        q = parent[q];
-    // while (parent[q] >= 0)
-    // {
-    //     tmp = q;
-    //     q = parent[q];
-    //     parent[tmp] = r;
-    // }
+    return r;
+}
+
+int Tarjan::find_2(BPT *bpt, int q)
+{
+    while (bpt->parent_2[q] >= 0)
+    {
+        q = bpt->parent_2[q];
+    }
 
     return q;
 }
 
-void Tarjan::union_k(int *parent, int &size, int x, int y)
+int Tarjan::find(BPT *bpt, int q)
 {
-    parent[y] = size;
-    parent[x] = size;
-    size++;
+    return find_1(bpt, q);
+}
+
+int Tarjan::union_k1(BPT *bpt, int x, int y)
+{
+    if (bpt->rank[x] > bpt->rank[y])
+    {
+        int tmp = x;
+        x = y;
+        y = tmp;
+    }
+    if (bpt->rank[x] == bpt->rank[y])
+    {
+        bpt->rank[y]++;
+    }
+    bpt->parent_1[x] = y;
+
+    // std::cout << "Unindo " << x << " e " << y << std::endl;
+
+    return y;
+}
+
+int Tarjan::union_k2(BPT *bpt, int x, int y)
+{
+    bpt->parent_2[x] = bpt->size_2;
+    bpt->parent_2[y] = bpt->size_2;
+    bpt->size_2++;
+    return (bpt->size_2) - 1;
+}
+
+int Tarjan::union_k(BPT *bpt, int x, int y)
+{
+    int tx = bpt->root[x];
+    int ty = bpt->root[y];
+
+    bpt->set_parent_2(tx, bpt->size_2);
+    bpt->set_parent_2(ty, bpt->size_2);
+
+    int c = union_k1(bpt, x, y);
+    bpt->root[c] = bpt->size_2;
+    bpt->make_set_2(bpt->size_2);
+
+    return bpt->size_2 - 1;
 }
 
 void BPT::kruskal(Grafo *gr)
 {
     int num_vertices = gr->get_num_vertices();
 
-    std::vector<MST_Edge> *arestas = gr->lista_arestas();
-    std::cout << "Até aqui vai" << std::endl;
-
-    std::sort(arestas->begin(), arestas->end(), [](const MST_Edge &a, const MST_Edge &b)
-              { return a.peso < b.peso; });
-
-    // std::cout << "Maior peso: " << arestas->at(0).peso << " Menor peso: " << arestas->at(arestas->size() - 1).peso << std::endl;
-    int *parent = new int[num_vertices * 2 - 1];
-    int size = 0;
-
-    NoBPT **raizes = new NoBPT *[num_vertices]();
-
     for (int i = 0; i < num_vertices; i++)
     {
-        parent[i] = -1;
+        make_set(i);
     }
-    size = num_vertices - 1;
 
-    int edge_count = 0;
-    int index = 0;
     int x, y;
-    NoBPT *pai1, *pai2;
+
+    int count = 0;
+
     std::cout << "Começando Kruskal..." << std::endl;
-    while (edge_count < num_vertices - 1)
+    for (int i = 0; i < 256; i++)
     {
-        MST_Edge proxima = arestas->at(index++);
-        x = Tarjan::find(parent, proxima.de);
-        y = Tarjan::find(parent, proxima.para);
-        if (x != y)
+        for (int j = 0; j < gr->count[i]; j++)
         {
+            x = 0;
+            y = 0;
 
-            if (folhas[proxima.de] == NULL)
+            int aresta = gr->arestas_ordenadas[i][j];
+
+            if ((aresta) & 1 == 1)
             {
-                folhas[proxima.de] = new No_Vertice(proxima.de);
-                raizes[proxima.de] = folhas[proxima.de];
+                x = aresta / 2;
+                y = (aresta / 2) + gr->width;
+            }
+            else
+            {
+                x = (aresta + 1) / 2;
+                y = ((aresta + 1) / 2) + 1;
             }
 
-            if (folhas[proxima.para] == NULL)
+            x = Tarjan::find(this, x);
+            y = Tarjan::find(this, y);
+
+            if (x != y)
             {
-                folhas[proxima.para] = new No_Vertice(proxima.para);
-                raizes[proxima.para] = folhas[proxima.para];
+                Tarjan::union_k(this, x, y);
+                gr->mst.push_back(aresta);
+                gr->map_grafo_mst[aresta] = count;
+                count++;
             }
-
-            No_Aresta *novo_no = new No_Aresta(proxima.de, proxima.para, proxima.peso);
-
-            pai1 = raizes[x];
-            pai2 = raizes[y];
-
-            raizes[x] = novo_no;
-            raizes[y] = novo_no;
-
-            novo_no->set_esq(pai1);
-            novo_no->set_dir(pai2);
-            pai1->set_pai(novo_no);
-            pai2->set_pai(novo_no);
-
-            gr->marcar_mst(proxima.de, proxima.para);
-
-            Tarjan::union_k(parent, size, x, y);
-
-            edge_count++;
-
-            novo_no = nullptr;
         }
     }
 
-    int root = Tarjan::find(parent, 0);
-    raiz = static_cast<No_Aresta *>(raizes[root]);
+    gr->editar_mst = new bool[gr->mst.size()];
+
+    for (size_t i = 0; i < gr->mst.size(); i++)
+    {
+        gr->editar_mst[i] = true;
+    }
 
     std::cout << "Kruskal finalizado!" << std::endl;
-    delete[] parent;
-    delete[] raizes;
-    delete arestas;
 }

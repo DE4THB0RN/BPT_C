@@ -12,6 +12,4 @@ typedef struct MST_Edge
     int peso;
 } MST_Edge;
 
-
-
 #endif // UTILIDADES_H

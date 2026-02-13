@@ -1,4 +1,5 @@
 #include "bpt.h"
+#include <iostream>
 
 //=============================================================
 // Código dos nós
@@ -87,13 +88,29 @@ BPT::BPT(int numV)
     raiz = nullptr;
     folhas.resize(numV);
 
-    parent = new int[numV * 2 - 1];
+    parent_1 = new int[numV * 2 - 1]();
+    parent_2 = new int[numV * 2 - 1]();
+    rank = new int[numV * 2 - 1]();
+    root = new int[numV * 2 - 1]();
+    marcas = new int[numV * 2 - 1]();
+    size_1 = 0;
+    size_2 = 0;
     size = 0;
 }
 
 BPT::~BPT()
 {
     delete_tree(raiz);
+    delete[] parent_1;
+    delete[] parent_2;
+    delete[] root;
+    delete[] rank;
+    delete[] marcas;
+    marcas = nullptr;
+    parent_1 = nullptr;
+    parent_2 = nullptr;
+    root = nullptr;
+    rank = nullptr;
     raiz = nullptr;
 }
 
@@ -185,8 +202,61 @@ void BPT::remover_seed(int seed, Grafo *gr)
     }
 }
 
+void BPT::adicionar_seeds2(int *seeds, int numseeds, Grafo *gr)
+{
+
+    int marca_atual, cima = 0;
+    std::vector<int> fila_corte;
+    bool *visitados = new bool[gr->get_num_vertices()]();
+
+    for (int i = 0; i < numseeds; i++)
+    {
+
+        marca_atual = marcas[seeds[i]];
+        cima = parent_2[marca_atual];
+        // std::cout << cima << std::endl;
+        while (cima != -1)
+        {
+            marcas[cima]++;
+            if (marcas[cima] == 2)
+            {
+                std::cout << "Index da aresta" << gr->index_aresta(cima) << std::endl;
+                gr->editar_mst[gr->index_aresta(cima)] = false;
+                fila_corte.push_back(gr->index_aresta(cima));
+                //          std::cout << "Corte adicionado: " << gr->index_aresta(cima) << std::endl;
+                break;
+            }
+            cima = parent_2[cima];
+        }
+    }
+
+    std::cout << "Recolorindo grafo..." << std::endl;
+    gr->colorir_grafo2(fila_corte, visitados);
+
+    delete[] visitados;
+}
+
+void BPT::make_set_1(int q)
+{
+    parent_1[q] = -1;
+    rank[q] = 0;
+    size_1++;
+}
+
+void BPT::make_set_2(int q)
+{
+    parent_2[q] = -1;
+    size_2++;
+}
+
 void BPT::make_set(int q)
 {
-    parent[q] = -1;
-    size++;
+    root[q] = q;
+    make_set_1(q);
+    make_set_2(q);
+}
+
+void BPT::set_parent_2(int q, int p)
+{
+    parent_2[q] = p;
 }
